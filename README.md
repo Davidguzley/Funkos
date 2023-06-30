@@ -33,4 +33,6 @@ To run the project locally, follow these steps:
 
 2. Navigate to the `project` directory.
 
-3. In the `server` directory, create a `.env` file and add the following environment variables:
+3. In the `server` directory, create a `.env` file and add the following environment variables
+
+4. Open two terminals and run "npm start" from the `server` and `client` folders.
