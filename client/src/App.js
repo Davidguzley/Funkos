@@ -1,25 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+// Admin pages
+import HomeAdmin from './pages/HomeAdmin';
+import Users from './pages/Users';
+import Reports from './pages/Reports';
+// Anonymous user
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Product from './pages/Product';
 
 function App() {
+  const isAdmin = false;
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Routes>
+
+          {isAdmin ? (
+          <>
+            <Route
+              path='/'
+              element={<HomeAdmin/>}
+            />
+
+            <Route
+              path='/users'
+              element={<Users/>}
+            />
+            
+            <Route
+              path='/reports'
+              element={<Reports/>}
+            />
+          </>
+          ) : null}
+
+          {!isAdmin ? (
+          <>
+            <Route
+              path='/'
+              element={<Home/>}
+            />
+
+            <Route
+              path='/login'
+              element={<Login/>}
+            />
+
+            <Route
+              path='/product/:sku'
+              element={<Product/>}
+            />
+          </>
+          ) : null}
+
+        </Routes>
+      </BrowserRouter>
     </div>
-  );
-}
+  )	
+  }
 
 export default App;
