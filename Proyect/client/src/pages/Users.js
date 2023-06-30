@@ -4,6 +4,11 @@ import { Link } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 
 function Users() {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const users = [
     {
       id: 1,
@@ -21,11 +26,6 @@ function Users() {
   ];
 
   const [showModal, setShowModal] = useState(false);
-  const [newUser, setNewUser] = useState({
-    firstName: '',
-    lastName: '',
-    email: ''
-  });
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -35,25 +35,10 @@ function Users() {
     setShowModal(false);
   };
 
-  const handleSaveUser = () => {
-    // Aquí puedes realizar las acciones necesarias para guardar el nuevo usuario
-    console.log('New User:', newUser);
-    // ...
-    // Actualiza la lista de usuarios, por ejemplo:
-    const updatedUsers = [...users, newUser];
-    // ...
+  const handleSaveUser = async (e) => {
+    e.preventDefault();
 
-    // Cierra el modal y reinicia los campos del nuevo usuario
-    handleCloseModal();
-    setNewUser({ firstName: '', lastName: '', email: '' });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewUser((prevUser) => ({
-      ...prevUser,
-      [name]: value
-    }));
+    console.log(email, password);
   };
 
   return (
@@ -87,15 +72,15 @@ function Users() {
           <Modal.Title>Add User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form className="createAdmin">
             <Form.Group controlId="firstName">
               <Form.Label>First Name</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter first name"
                 name="firstName"
-                value={newUser.firstName}
-                onChange={handleInputChange}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
               />
             </Form.Group>
             <Form.Group controlId="lastName">
@@ -104,8 +89,8 @@ function Users() {
                 type="text"
                 placeholder="Enter last name"
                 name="lastName"
-                value={newUser.lastName}
-                onChange={handleInputChange}
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
               />
             </Form.Group>
             <Form.Group controlId="email">
@@ -114,8 +99,18 @@ function Users() {
                 type="email"
                 placeholder="Enter email"
                 name="email"
-                value={newUser.email}
-                onChange={handleInputChange}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
           </Form>
