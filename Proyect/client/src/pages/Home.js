@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import Topbar from '../components/Topbar';
 
 function Home() {
-      // Datos de ejemplo de los productos
     const products = [
     {
         id: 1,
@@ -29,8 +28,6 @@ function Home() {
 
     return (
         <div>
-            
-            {/*Navbar preparada con links y variable isAdmin*/}
             <Topbar></Topbar>
 
             <Container className="mt-4">
