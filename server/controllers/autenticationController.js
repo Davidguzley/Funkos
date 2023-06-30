@@ -6,4 +6,4 @@ const logoutUser = async (req, res) => {
     res.json({mssg: 'logout user'})
 };
 
-module.exports = { loginUser, logoutUser, signupUser };
+module.exports = { loginUser, logoutUser };
