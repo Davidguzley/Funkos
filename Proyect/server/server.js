@@ -2,6 +2,7 @@ require('dotenv').config();
 let CONSTANTS = require("./constantsProject");
 
 const express = require("express");
+const cors = require('cors');
 const mongoose = require("mongoose");
 
 const autenticationRoutes = require('./Routes/autenticationRouter');
@@ -13,6 +14,8 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+
+app.use(cors());
 
 app.get((req, res, next) => {
     console.log(req.path, req.method);

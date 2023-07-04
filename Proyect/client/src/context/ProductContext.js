@@ -3,8 +3,6 @@ import { createContext, useReducer } from 'react';
 export const ProductContext = createContext();
 
 export const productReducer = (state, action) => {
-    console.log(action.type)
-    console.log(state)
     switch (action.type) {
         case 'SET_PRODUCTS':
             return { products: action.payload }
@@ -23,8 +21,8 @@ export const ProductContextProvider = ({ children }) => {
     console.log('ProductContext state', state)
 
     return (
-        <ProductContextProvider.Provider value={{...state, dispatch}}>
+        <ProductContext.Provider value={{...state, dispatch}}>
             { children }
-        </ProductContextProvider.Provider>
+        </ProductContext.Provider>
     )
 }
