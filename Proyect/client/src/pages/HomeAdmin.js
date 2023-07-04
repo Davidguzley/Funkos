@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Topbar from '../components/Topbar';
 
 function HomeAdmin() {
   // Datos de ejemplo de los productos
@@ -29,9 +28,6 @@ function HomeAdmin() {
 
   return (
     <div>
-      {/*Navbar preparada con links y variable isAdmin*/}
-      <Topbar></Topbar>
-
       <Container className="mt-4">
         <Row>
           {products.map((product) => (
@@ -54,10 +50,6 @@ function HomeAdmin() {
           ))}
         </Row>
       </Container>
-
-      <footer className="bg-light text-center py-3">
-        <p>Contact us: 123-456-789</p>
-      </footer>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Container, ListGroup, Button, Modal, Form } from 'react-bootstrap';
-import Topbar from '../components/Topbar';
 
 function Users() {
   const [first_name, setFirstName] = useState('');
@@ -76,8 +75,6 @@ function Users() {
 
   return (
     <div>
-      <Topbar></Topbar>
-
       <Container className="mt-4">
         <Button variant="success" onClick={handleShowModal}>
           Add User
@@ -158,10 +155,6 @@ function Users() {
           </Button>
         </Modal.Footer>
       </Modal>
-
-      <footer className="bg-light text-center py-3">
-        <p>Contact us: 123-456-789</p>
-      </footer>
     </div>
   );
 }

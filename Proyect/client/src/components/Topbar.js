@@ -1,7 +1,7 @@
 import { Navbar, Nav, Button, Container} from 'react-bootstrap';
 
 const Topbar = () => {
-    const isAdmin = false;
+    const isAdmin = true;
 
     return(
         <>

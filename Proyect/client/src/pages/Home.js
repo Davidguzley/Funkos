@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Card} from 'react-bootstrap';
 import { Link } from 'react-router-dom'
-import Topbar from '../components/Topbar';
 
 function Home() {
     const products = [
@@ -28,8 +27,6 @@ function Home() {
 
     return (
         <div>
-            <Topbar></Topbar>
-
             <Container className="mt-4">
                 <Row>
                 {products.map((product) => (
@@ -47,10 +44,6 @@ function Home() {
                 ))}
                 </Row>
             </Container>
-            
-            <footer className="bg-light text-center py-3">
-                <p>Contact us: 123-456-789</p>
-            </footer>
         </div>
     )
 }

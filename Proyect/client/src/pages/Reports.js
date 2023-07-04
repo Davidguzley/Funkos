@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Table } from 'react-bootstrap';
-import Topbar from '../components/Topbar';
 
 function Reports() {
     // Datos de ejemplo de los informes
@@ -22,8 +21,6 @@ function Reports() {
 
     return (
     <div>
-        <Topbar></Topbar>
-
         <Container className="mt-4">
         <Table striped bordered hover>
             <thead>
@@ -46,10 +43,6 @@ function Reports() {
             </tbody>
         </Table>
         </Container>
-
-        <footer className="bg-light text-center py-3">
-        <p>Contact us: 123-456-789</p>
-        </footer>
     </div>
     );
 }

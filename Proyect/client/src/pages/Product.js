@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import Topbar from '../components/Topbar';
 
 const Product = () => {
     const params = useParams();
@@ -35,7 +34,6 @@ const Product = () => {
         {product ? 
         (
         <div>
-            <Topbar></Topbar>
 
             <Container className="mt-4">
                 <div className="d-flex justify-content-center">
