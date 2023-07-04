@@ -1,7 +1,17 @@
 import { Navbar, Nav, Button, Container} from 'react-bootstrap';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const Topbar = () => {
-    const isAdmin = true;
+    const { dispatch } = useAuthContext();
+    const isAdmin = false;
+
+    const handleClick = () => {
+        // remove admin from storage
+        localStorage.removeItem('admin');
+
+        // dispatch logout action
+        dispatch({type: 'LOGOUT'});
+    };
 
     return(
         <>
@@ -25,8 +35,11 @@ const Topbar = () => {
             ) : null}
 
             </Nav>
-                <Button variant="outline-success" href={isAdmin ? "/logout" : "/login"}>
-                    {isAdmin ? "Logout" : "Login"}
+                <Button variant="outline-success" href={"/login"}>
+                    Login
+                </Button>
+                <Button variant="outline-success" onClick={handleClick}>
+                    Logout
                 </Button>
             </Navbar.Collapse>
         </Container>

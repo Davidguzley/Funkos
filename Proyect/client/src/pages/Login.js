@@ -45,7 +45,7 @@ function Login() {
       setPassword('');
       setError(null);
       setIsLoading(false);
-      window.location.href = '/';
+      //window.location.href = '/';
     }
   };
 

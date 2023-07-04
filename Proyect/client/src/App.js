@@ -12,7 +12,7 @@ import Login from './pages/Login';
 import Product from './pages/Product';
 
 function App() {
-  const isAdmin = true;
+  const isAdmin = false;
   
   return (
     <div className="App">
