@@ -10,9 +10,12 @@ import Reports from './pages/Reports';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Product from './pages/Product';
+// Auth Context
+import { useAuthContext } from './hooks/useAuthContext';
 
 function App() {
-  const isAdmin = false;
+  //Auth Status
+  const { user } = useAuthContext();
   
   return (
     <div className="App">
@@ -20,7 +23,7 @@ function App() {
         <BrowserRouter>
           <Routes>
 
-            {isAdmin ? (
+            {user ? (
             <>
               <Route
                 path='/'
@@ -39,7 +42,7 @@ function App() {
             </>
             ) : null}
 
-            {!isAdmin ? (
+            {!user ? (
             <>
               <Route
                 path='/'

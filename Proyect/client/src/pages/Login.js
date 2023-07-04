@@ -19,8 +19,6 @@ function Login() {
       email: email,
       password: password
     };
-
-    console.log(admin);
   
     const response = await fetch('http://localhost:5000/api/autentication/login', {
       method: 'POST',
@@ -45,7 +43,7 @@ function Login() {
       setPassword('');
       setError(null);
       setIsLoading(false);
-      //window.location.href = '/';
+      window.location.href = '/';
     }
   };
 
