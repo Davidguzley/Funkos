@@ -20,7 +20,7 @@ function Login() {
       password: password
     };
   
-    const response = await fetch('http://localhost:5000/api/autentication/login', {
+    const response = await fetch('http://localhost:5000/api/authentication/login', {
       method: 'POST',
       body: JSON.stringify(admin),
       headers: {

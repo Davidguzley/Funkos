@@ -5,7 +5,7 @@ const express = require("express");
 const cors = require('cors');
 const mongoose = require("mongoose");
 
-const autenticationRoutes = require('./Routes/autenticationRouter');
+const authenticationRoutes = require('./Routes/authenticationRouter');
 const adminRoutes = require('./Routes/adminRouter');
 const productRoutes = require('./Routes/productRouter');
 
@@ -23,7 +23,7 @@ app.get((req, res, next) => {
 });
 
 // Routes
-app.use('/api/autentication', autenticationRoutes);
+app.use('/api/authentication', authenticationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/product', productRoutes);
 

@@ -1,6 +1,7 @@
 let CONSTANTS = require("../constantsProject");
 const express = require('express');
 const router = express.Router();
+const requireAuth = require('../middleware/requireAuth');
 
 const {
     createAdmin,
@@ -9,6 +10,9 @@ const {
     deleteAdmin,
     updateAdmin
 } = require('../controllers/adminController');
+
+// Require auth for all admin routes
+router.use(requireAuth);
 
 // GET all Admin users
 router.get('/', getAdmins);
