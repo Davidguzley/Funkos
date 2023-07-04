@@ -105,7 +105,7 @@ function Users() {
           <Modal.Title>Add User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {error && <p className="text-danger">{error}</p>} {/* Mostrar el mensaje de error si existe */}
+          {error && <p className="text-danger">{error}</p>}
           <Form className="createAdmin">
             <Form.Group controlId="first_name">
               <Form.Label>First Name</Form.Label>
