@@ -48,6 +48,25 @@ adminSchema.statics.signup = async function(first_name, last_name, email, passwo
     return admin;
 };
 
+adminSchema.statics.login = async function(email, password) {
+    //validation
+    if (!email || !password) {
+        throw Error('All fields must be filled');
+    }
+
+    const admin = await this.findOne({ email });
+    if (!admin) {
+        throw Error('Incorrect Email');
+    }
+
+    const match = await bcrypt.compare(password, admin.password);
+    if (!match) {
+        throw Error('Incorrect password');
+    }
+
+    return admin;
+};
+
 const Admin = mongoose.model('Admin', adminSchema);
 
 module.exports = Admin;

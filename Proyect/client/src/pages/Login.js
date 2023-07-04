@@ -3,8 +3,8 @@ import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
     // Aquí puedes implementar la lógica de inicio de sesión
   };
 
