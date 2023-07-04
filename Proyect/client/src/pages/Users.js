@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, ListGroup, Button, Modal, Form } from 'react-bootstrap';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 function Users() {
   const [first_name, setFirstName] = useState('');
@@ -8,6 +9,8 @@ function Users() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const { user } = useAuthContext();
 
   const users = [
     {
@@ -25,8 +28,6 @@ function Users() {
     // Agrega más usuarios aquí
   ];
 
-  const [showModal, setShowModal] = useState(false);
-
   const handleShowModal = () => {
     setShowModal(true);
   };
@@ -37,10 +38,15 @@ function Users() {
   };
 
   const handleSaveUser = async (e) => {
+    e.preventDefault();
+
+    if(user == null) {
+      setError('You must be logged in');
+      return
+    }
+
     setIsLoading(true);
     setError(null);
-
-    e.preventDefault();
   
     const admin = {
       first_name: first_name,
@@ -53,7 +59,8 @@ function Users() {
       method: 'POST',
       body: JSON.stringify(admin),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
       }
     });
     const json = await response.json();
