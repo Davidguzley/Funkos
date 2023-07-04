@@ -4,12 +4,11 @@ import { Link } from 'react-router-dom'
 import Topbar from '../components/Topbar';
 
 function Home() {
-      // Datos de ejemplo de los productos
     const products = [
     {
         id: 1,
         name: 'Product 1',
-        image: 'https://static.pexels.com/photos/9611/flowers.jpg',
+        image: 'https://files.cults3d.com/uploaders/14265452/illustration-file/0427d021-b91d-4146-9ffd-b1a05323527e/11721268-1054658741999706.jpg',
         price: 9.99,
         description: 'Product 1 description',
         sku: 'SKU-001',
@@ -18,7 +17,7 @@ function Home() {
     {
         id: 2,
         name: 'Product 2',
-        image: 'https://static.pexels.com/photos/9611/flowers.jpg',
+        image: 'https://files.cults3d.com/uploaders/14265452/illustration-file/0427d021-b91d-4146-9ffd-b1a05323527e/11721268-1054658741999706.jpg',
         price: 14.99,
         description: 'Product 2 description',
         sku: 'SKU-002',
@@ -29,8 +28,6 @@ function Home() {
 
     return (
         <div>
-            
-            {/*Navbar preparada con links y variable isAdmin*/}
             <Topbar></Topbar>
 
             <Container className="mt-4">

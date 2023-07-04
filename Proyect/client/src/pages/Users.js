@@ -1,31 +1,32 @@
 import React, { useState } from 'react';
 import { Container, ListGroup, Button, Modal, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import Topbar from '../components/Topbar';
 
 function Users() {
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(null);
+
   const users = [
     {
       id: 1,
-      firstName: 'John',
-      lastName: 'Doe',
+      first_name: 'John',
+      last_name: 'Doe',
       email: 'john.doe@example.com'
     },
     {
       id: 2,
-      firstName: 'Jane',
-      lastName: 'Smith',
+      first_name: 'Jane',
+      last_name: 'Smith',
       email: 'jane.smith@example.com'
     },
     // Agrega más usuarios aquí
   ];
 
   const [showModal, setShowModal] = useState(false);
-  const [newUser, setNewUser] = useState({
-    firstName: '',
-    lastName: '',
-    email: ''
-  });
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -33,28 +34,45 @@ function Users() {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setError(null); // Limpiar el error al cerrar el modal
   };
 
-  const handleSaveUser = () => {
-    // Aquí puedes realizar las acciones necesarias para guardar el nuevo usuario
-    console.log('New User:', newUser);
-    // ...
-    // Actualiza la lista de usuarios, por ejemplo:
-    const updatedUsers = [...users, newUser];
-    // ...
+  const handleSaveUser = async (e) => {
+    setIsLoading(true);
+    setError(null);
 
-    // Cierra el modal y reinicia los campos del nuevo usuario
-    handleCloseModal();
-    setNewUser({ firstName: '', lastName: '', email: '' });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewUser((prevUser) => ({
-      ...prevUser,
-      [name]: value
-    }));
-  };
+    e.preventDefault();
+  
+    const admin = {
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      password: password
+    };
+  
+    const response = await fetch('http://localhost:5000/api/admin', {
+      method: 'POST',
+      body: JSON.stringify(admin),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const json = await response.json();
+  
+    if (!response.ok) {
+      setIsLoading(false);
+      setError(json.error);
+    }
+    if (response.ok) {
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPassword('');
+      setError(null);
+      handleCloseModal();
+      setIsLoading(false);
+    }
+  };  
 
   return (
     <div>
@@ -69,11 +87,11 @@ function Users() {
             <ListGroup.Item key={user.id}>
               <div className="d-flex justify-content-between align-items-center">
                 <div>
-                  {user.firstName} {user.lastName}
+                  {user.first_name} {user.last_name}
                 </div>
                 <div>
-                    <Button variant="primary">Edit</Button>
-                    <Button variant="danger">Delete</Button>
+                  <Button variant="primary">Edit</Button>
+                  <Button variant="danger">Delete</Button>
                 </div>
               </div>
               <div>Email: {user.email}</div>
@@ -82,30 +100,31 @@ function Users() {
         </ListGroup>
       </Container>
 
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal show={showModal} onHide={handleCloseModal} disabled={isLoading}>
         <Modal.Header closeButton>
           <Modal.Title>Add User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group controlId="firstName">
+          {error && <p className="text-danger">{error}</p>} {/* Mostrar el mensaje de error si existe */}
+          <Form className="createAdmin">
+            <Form.Group controlId="first_name">
               <Form.Label>First Name</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter first name"
-                name="firstName"
-                value={newUser.firstName}
-                onChange={handleInputChange}
+                name="first_name"
+                value={first_name}
+                onChange={(e) => setFirstName(e.target.value)}
               />
             </Form.Group>
-            <Form.Group controlId="lastName">
+            <Form.Group controlId="last_name">
               <Form.Label>Last Name</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter last name"
-                name="lastName"
-                value={newUser.lastName}
-                onChange={handleInputChange}
+                name="last_name"
+                value={last_name}
+                onChange={(e) => setLastName(e.target.value)}
               />
             </Form.Group>
             <Form.Group controlId="email">
@@ -114,17 +133,27 @@ function Users() {
                 type="email"
                 placeholder="Enter email"
                 name="email"
-                value={newUser.email}
-                onChange={handleInputChange}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button variant="secondary" onClick={handleCloseModal} disabled={isLoading}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSaveUser}>
+          <Button variant="primary" onClick={handleSaveUser} disabled={isLoading}>
             Save
           </Button>
         </Modal.Footer>
