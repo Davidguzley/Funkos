@@ -18,7 +18,7 @@ const reportSchema = new mongoose.Schema({
         default: Date.now,
         required: true
     }
-});
+}, { timestamps: true });
 
 const Reports = mongoose.model('Reports', reportSchema);
 

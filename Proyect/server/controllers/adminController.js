@@ -5,6 +5,7 @@ const createToken = (_id) => {
     return jwt.sign({ _id }, process.env.SECRET, { expiresIn: '3d' });
 };
 
+// Create new Admin user
 const createAdmin = async (req, res) => {
     const {first_name, last_name, email, password} = req.body
 

@@ -20,7 +20,7 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: true,
     }
-});
+}, { timestamps: true });
 
 adminSchema.statics.signup = async function(first_name, last_name, email, password) {
     const exists = await this.findOne({ email });

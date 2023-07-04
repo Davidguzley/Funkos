@@ -7,7 +7,9 @@ const createProduct = async (req, res) => {
 
 // Get all products
 const getProducts = async (req, res) => {
-    res.json({mssg: 'getProducts'})
+    const products = await Product.find({}).sort({createdAt: -1});
+
+    res.status(200).json(products);
 };
 
 // Get a single product
