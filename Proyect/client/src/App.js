@@ -8,6 +8,9 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Product from './pages/Product';
 import { useAuthContext } from './hooks/useAuthContext';
+import Cookies from 'universal-cookie';
+import { v4 as uuidv4 } from 'uuid';
+import React, { useEffect } from 'react';
 
 function App() {
   const { user } = useAuthContext();
@@ -21,6 +24,17 @@ function App() {
   const redirectToHome = () => {
     return <Navigate to="/" replace />;
   };
+
+  //Add cookie session
+  useEffect(() => {
+    const cookies = new Cookies();
+    const token_id = cookies.get('token_id');
+
+    if (!token_id) {
+      const generatedNumber = uuidv4();
+      cookies.set('token_id', generatedNumber, { path: '/' });
+    }
+  }, []);
 
   return (
     <div className="App">
