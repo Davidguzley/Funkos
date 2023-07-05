@@ -1,27 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Modal, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useProductContext } from '../hooks/useProductContext';
 
 function HomeAdmin() {
+  // Product context
   const { products, dispatch } = useProductContext();
+
+  // Initial values
   const [SKU, setSKU] = useState('');
   const [name, setName] = useState('');
   const [price, setPrice] = useState(null);
   const [brand, setBrand] = useState('');
   const [description, setDescription] = useState('');
+
+  // State variables
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
+
+  //Edited values
   const [editSKU, setEditSKU] = useState('');
   const [editName, setEditName] = useState('');
   const [editPrice, setEditPrice] = useState(null);
   const [editBrand, setEditBrand] = useState('');
   const [editDescription, setEditDescription] = useState('');
+
+  // Auth
   const { user } = useAuthContext();
 
+  // Get all products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/product');
+        const json = await response.json();
+
+        if (response.ok) {
+          dispatch({ type: 'SET_PRODUCTS', payload: json });
+        }
+      } catch (error) {
+        setError('An error occurred while fetching the products.');
+      }
+    };
+
+    fetchProducts();
+  }, [dispatch]);
+
+  // Product modal functions
   const handleShowModal = () => {
     setShowModal(true);
   };
@@ -37,6 +64,7 @@ function HomeAdmin() {
     setEditDescription('');
   };
 
+  // Create a new product
   const handleSaveProduct = async (e) => {
     e.preventDefault();
 
@@ -90,6 +118,7 @@ function HomeAdmin() {
     }
   };
 
+  // Delete a specific product
   const handleDeleteProduct = async (productId) => {
     try {
       const response = await fetch(`http://localhost:5000/api/product/${productId}`, {
@@ -110,6 +139,7 @@ function HomeAdmin() {
     }
   };
 
+  // Set edited values
   const handleEditProduct = (product) => {
     setEditProduct(product);
     setEditSKU(product.SKU);
@@ -120,6 +150,7 @@ function HomeAdmin() {
     handleShowModal();
   };
 
+  // Update a specific product
   const handleUpdateProduct = async () => {
     if (editProduct == null) {
       return;
@@ -129,7 +160,6 @@ function HomeAdmin() {
     setError(null);
 
     const updatedProduct = {
-      SKU: editSKU,
       name: editName,
       price: editPrice,
       brand: editBrand,
@@ -147,6 +177,7 @@ function HomeAdmin() {
       });
 
       const json = await response.json();
+
       if (response.ok) {
         dispatch({ type: 'UPDATE_PRODUCT', payload: { _id: editProduct._id, ...updatedProduct } });
 
@@ -162,23 +193,6 @@ function HomeAdmin() {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/product');
-        const json = await response.json();
-
-        if (response.ok) {
-          dispatch({ type: 'SET_PRODUCTS', payload: json });
-        }
-      } catch (error) {
-        setError('An error occurred while fetching the products.');
-      }
-    };
-
-    fetchProducts();
-  }, [dispatch]);
 
   return (
     <div>
@@ -236,6 +250,7 @@ function HomeAdmin() {
                 placeholder="Enter SKU"
                 value={editProduct ? editSKU : SKU}
                 onChange={editProduct ? (e) => setEditSKU(e.target.value) : (e) => setSKU(e.target.value)}
+                disabled={editProduct}
               />
             </Form.Group>
             <Form.Group controlId="formName">
@@ -281,6 +296,7 @@ function HomeAdmin() {
           </Form>
         </Modal.Body>
       </Modal>
+
     </div>
   );
 }
