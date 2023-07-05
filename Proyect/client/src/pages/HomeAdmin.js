@@ -14,6 +14,12 @@ function HomeAdmin() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [editProduct, setEditProduct] = useState(null);
+  const [editSKU, setEditSKU] = useState('');
+  const [editName, setEditName] = useState('');
+  const [editPrice, setEditPrice] = useState(null);
+  const [editBrand, setEditBrand] = useState('');
+  const [editDescription, setEditDescription] = useState('');
   const { user } = useAuthContext();
 
   const handleShowModal = () => {
@@ -23,6 +29,12 @@ function HomeAdmin() {
   const handleCloseModal = () => {
     setShowModal(false);
     setError(null);
+    setEditProduct(null);
+    setEditSKU('');
+    setEditName('');
+    setEditPrice(null);
+    setEditBrand('');
+    setEditDescription('');
   };
 
   const handleSaveProduct = async (e) => {
@@ -98,6 +110,59 @@ function HomeAdmin() {
     }
   };
 
+  const handleEditProduct = (product) => {
+    setEditProduct(product);
+    setEditSKU(product.SKU);
+    setEditName(product.name);
+    setEditPrice(product.price);
+    setEditBrand(product.brand);
+    setEditDescription(product.description);
+    handleShowModal();
+  };
+
+  const handleUpdateProduct = async () => {
+    if (editProduct == null) {
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    const updatedProduct = {
+      SKU: editSKU,
+      name: editName,
+      price: editPrice,
+      brand: editBrand,
+      description: editDescription
+    };
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/product/${editProduct._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(updatedProduct),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
+
+      const json = await response.json();
+      if (response.ok) {
+        dispatch({ type: 'UPDATE_PRODUCT', payload: { _id: editProduct._id, ...updatedProduct } });
+
+        setError(null);
+        handleCloseModal();
+      } else {
+        setError(json.error);
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      setError('An error occurred while updating the product.');
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -147,9 +212,7 @@ function HomeAdmin() {
                       <strong>Description:</strong> {product.description}
                     </Card.Text>
                     <div className="d-flex justify-content-between">
-                      <Link to={`/product/${product._id}`}>
-                        <Button variant="primary">Edit</Button>
-                      </Link>
+                      <Button variant="primary" onClick={() => handleEditProduct(product)}>Edit</Button>
                       <Button variant="danger" onClick={() => handleDeleteProduct(product._id)}>Delete</Button>
                     </div>
                   </Card.Body>
@@ -161,72 +224,62 @@ function HomeAdmin() {
 
       <Modal show={showModal} onHide={handleCloseModal} disabled={isLoading}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Product</Modal.Title>
+          <Modal.Title>{editProduct ? 'Edit Product' : 'Add Product'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {error && <p className="text-danger">{error}</p>}
-          <Form className="createAdmin">
-            <Form.Group controlId="SKU">
+          <Form onSubmit={editProduct ? handleUpdateProduct : handleSaveProduct}>
+            <Form.Group controlId="formSKU">
               <Form.Label>SKU</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter SKU"
-                name="SKU"
-                value={SKU}
-                onChange={(e) => setSKU(e.target.value)}
+                value={editProduct ? editSKU : SKU}
+                onChange={editProduct ? (e) => setEditSKU(e.target.value) : (e) => setSKU(e.target.value)}
               />
             </Form.Group>
-            <Form.Group controlId="name">
+            <Form.Group controlId="formName">
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter name"
-                name="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter Name"
+                value={editProduct ? editName : name}
+                onChange={editProduct ? (e) => setEditName(e.target.value) : (e) => setName(e.target.value)}
               />
             </Form.Group>
-            <Form.Group controlId="price">
+            <Form.Group controlId="formPrice">
               <Form.Label>Price</Form.Label>
               <Form.Control
                 type="number"
-                placeholder="Enter price"
-                name="price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                placeholder="Enter Price"
+                value={editProduct ? editPrice : price}
+                onChange={editProduct ? (e) => setEditPrice(e.target.value) : (e) => setPrice(e.target.value)}
               />
             </Form.Group>
-            <Form.Group controlId="brand">
+            <Form.Group controlId="formBrand">
               <Form.Label>Brand</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter brand"
-                name="brand"
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
+                placeholder="Enter Brand"
+                value={editProduct ? editBrand : brand}
+                onChange={editProduct ? (e) => setEditBrand(e.target.value) : (e) => setBrand(e.target.value)}
               />
             </Form.Group>
-            <Form.Group controlId="description">
+            <Form.Group controlId="formDescription">
               <Form.Label>Description</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
-                placeholder="Enter description"
-                name="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Enter Description"
+                value={editProduct ? editDescription : description}
+                onChange={editProduct ? (e) => setEditDescription(e.target.value) : (e) => setDescription(e.target.value)}
               />
             </Form.Group>
+            <Button variant="primary" type="submit" disabled={isLoading}>
+              {editProduct ? 'Update' : 'Save'}
+            </Button>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal} disabled={isLoading}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSaveProduct} disabled={isLoading}>
-            Save
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );
