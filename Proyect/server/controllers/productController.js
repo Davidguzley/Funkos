@@ -6,6 +6,16 @@ const createProduct = async (req, res) => {
     const {SKU, name, price, brand, description} = req.body;
     //add doc to db
     try{
+        //validation
+        const exists = await Product.findOne({ SKU });
+
+        if (exists) {
+            throw Error('SKU alredy in use');
+        }
+
+        if (!SKU || !name || !price || !brand || !description) {
+            throw Error('All fields must be filled');
+        }
         const product = await Product.create({SKU, name, price, brand, description});
         res.status(200).json(product);
     }catch(error){
