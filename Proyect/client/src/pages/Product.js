@@ -38,7 +38,6 @@ const Product = () => {
                     // Get session cookie
                     const cookies = new Cookies();
                     const token_id = cookies.get('token_id');
-                    console.log('Value of token_id cookie:', token_id);
 
                     const report = {
                         token_id: token_id,
@@ -58,7 +57,6 @@ const Product = () => {
 
                     if (response.ok) {
                         setError(null);
-                        console.log(json);
                     } else {
                         setError(json.error);
                     }
