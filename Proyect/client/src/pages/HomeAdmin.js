@@ -25,62 +25,90 @@ function HomeAdmin() {
     setError(null);
   };
 
-  // Save new Product
   const handleSaveProduct = async (e) => {
     e.preventDefault();
-  
+
     if (user == null) {
       setError('You must be logged in');
       return;
     }
-  
+
     setIsLoading(true);
     setError(null);
-  
+
     const newProduct = {
-      id: Date.now(),
       SKU: SKU,
       name: name,
       price: price,
       brand: brand,
       description: description
     };
-  
-    const response = await fetch('http://localhost:5000/api/product', {
-      method: 'POST',
-      body: JSON.stringify(newProduct),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user.token}`
+
+    try {
+      const response = await fetch('http://localhost:5000/api/product', {
+        method: 'POST',
+        body: JSON.stringify(newProduct),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
+
+      if (response.ok) {
+        const json = await response.json();
+        newProduct._id = json._id;
+        dispatch({ type: 'CREATE_PRODUCT', payload: newProduct });
+
+        setSKU('');
+        setName('');
+        setPrice(null);
+        setBrand('');
+        setDescription('');
+        setError(null);
+        handleCloseModal();
+      } else {
+        const json = await response.json();
+        setError(json.error);
       }
-    });
-    const json = await response.json();
-  
-    if (!response.ok) {
+
       setIsLoading(false);
-      setError(json.error);
-    }
-    if (response.ok) {
-      dispatch({ type: 'CREATE_PRODUCT', payload: newProduct });
-      setSKU('');
-      setName('');
-      setPrice(null);
-      setBrand('');
-      setDescription('');
-      setError(null);
-      handleCloseModal();
+    } catch (error) {
+      setError('An error occurred while saving the product.');
       setIsLoading(false);
     }
   };
 
-  // Get all products
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const response = await fetch('http://localhost:5000/api/product');
-      const json = await response.json();
+  const handleDeleteProduct = async (productId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/product/${productId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
 
       if (response.ok) {
-        dispatch({ type: 'SET_PRODUCTS', payload: json });
+        dispatch({ type: 'DELETE_PRODUCT', payload: { _id: productId } });
+      } else {
+        const json = await response.json();
+        setError(json.error);
+      }
+    } catch (error) {
+      setError('An error occurred while deleting the product.');
+    }
+  };
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/product');
+        const json = await response.json();
+
+        if (response.ok) {
+          dispatch({ type: 'SET_PRODUCTS', payload: json });
+        }
+      } catch (error) {
+        setError('An error occurred while fetching the products.');
       }
     };
 
@@ -96,13 +124,11 @@ function HomeAdmin() {
         <Row>
           {products &&
             products.map((product) => (
-              <Col key={product.id} md={4} className="mb-4">
+              <Col key={product._id} md={4} className="mb-4">
                 <Card>
                   <Card.Img
                     variant="top"
-                    src={
-                      'https://files.cults3d.com/uploaders/14265452/illustration-file/0427d021-b91d-4146-9ffd-b1a05323527e/11721268-1054658741999706.jpg'
-                    }
+                    src="https://files.cults3d.com/uploaders/14265452/illustration-file/0427d021-b91d-4146-9ffd-b1a05323527e/11721268-1054658741999706.jpg"
                   />
                   <Card.Body>
                     <Card.Title>
@@ -121,10 +147,10 @@ function HomeAdmin() {
                       <strong>Description:</strong> {product.description}
                     </Card.Text>
                     <div className="d-flex justify-content-between">
-                      <Link to={`/product/${product.id}`}>
+                      <Link to={`/product/${product._id}`}>
                         <Button variant="primary">Edit</Button>
                       </Link>
-                      <Button variant="danger">Delete</Button>
+                      <Button variant="danger" onClick={() => handleDeleteProduct(product._id)}>Delete</Button>
                     </div>
                   </Card.Body>
                 </Card>

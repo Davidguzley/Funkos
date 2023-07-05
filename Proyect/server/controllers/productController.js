@@ -49,7 +49,19 @@ const getProduct = async (req, res) => {
 
 // Delete a product
 const deleteProduct = async (req, res) => {
-    res.json({mssg: 'deleteProduct'})
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({error: 'No such product'});
+    }
+
+    const product = await Product.findOneAndDelete({_id: id});
+
+    if (!product) {
+        return res.status(404).json({error: 'No such product'});
+    }
+
+    res.status(200).json(product);
 };
 
 // Update a product
