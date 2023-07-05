@@ -34,7 +34,7 @@ function Users() {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setError(null); // Limpiar el error al cerrar el modal
+    setError(null);
   };
 
   const handleSaveUser = async (e) => {
