@@ -25,14 +25,49 @@ The project is organized into two main directories:
 - JSON Web Token (JWT)
 - Bootstrap
 
-## Setup Instructions
+## Future Actions
 
-To run the project locally, follow these steps:
+- Add a deployment manual for the project on Digital Ocean to deploy the project remotely.
 
-1. Clone the repository to your local machine.
+## Usage
+- Create a MongoDB database and obtain your `MongoDB URI` - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
+- Clone the repository to your local machine.
+- Navigate to the `project` directory.
 
-2. Navigate to the `project` directory.
+### Install Dependencies (frontend & backend)
 
-3. In the `server` directory, create a `.env` file and add the following environment variables
+```
+cd server
+npm install
+```
 
-4. Open two terminals and run "npm start" from the `server` and `client` folders.
+```
+cd client
+npm install
+```
+
+### Env Variables
+
+In the `server` directory, create a `.env` file and add the following environment variables
+
+```
+NODE_ENV=development
+PORT=5000
+MONGO_URI=your mongodb uri
+SECRET='abc123'
+```
+
+Change the JWT_SECRET to what you want
+
+## Run
+Open two terminals and run "npm start" from the `server` and `client` folders.
+
+```
+cd server
+npm start
+```
+
+```
+cd client
+npm start
+```
