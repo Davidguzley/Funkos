@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const authenticationRoutes = require('./Routes/authenticationRouter');
 const adminRoutes = require('./Routes/adminRouter');
 const productRoutes = require('./Routes/productRouter');
+const reportRoutes = require('./Routes/reportRouter');
 
 // Express app
 const app = express();
@@ -26,6 +27,7 @@ app.get((req, res, next) => {
 app.use('/api/authentication', authenticationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/product', productRoutes);
+app.use('/api/report', reportRoutes);
 
 //Connect to DB
 mongoose.connect(process.env.MONGO_URI)
