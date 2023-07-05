@@ -95,6 +95,27 @@ function Users() {
     }
   };
 
+  // Function to delete user
+  const deleteUser = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/admin/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
+  
+      if (response.ok) {
+        setUsers(users.filter((user) => user._id !== userId));
+      } else {
+        setError('Failed to delete user');
+      }
+    } catch (error) {
+      setError('Failed to delete user');
+    }
+  };
+
   return (
     <div>
       <Container className="mt-4">
@@ -103,14 +124,16 @@ function Users() {
         </Button>
         <ListGroup>
           {users.map((user) => (
-            <ListGroup.Item key={user.id}>
+            <ListGroup.Item key={user._id}>
               <div className="d-flex justify-content-between align-items-center">
                 <div>
                   {user.first_name} {user.last_name}
                 </div>
                 <div>
                   <Button variant="primary">Edit</Button>
-                  <Button variant="danger">Delete</Button>
+                  <Button variant="danger" onClick={() => deleteUser(user._id)}>
+                    Delete
+                  </Button>
                 </div>
               </div>
               <div>Email: {user.email}</div>
