@@ -4,10 +4,11 @@ import { useAuthContext } from '../hooks/useAuthContext';
 
 function Users() {
   const [users, setUsers] = useState([]);
-  const [first_name, setFirstName] = useState('');
-  const [last_name, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [editId, setEditId] = useState('');
+  const [editFirstName, setEditFirstName] = useState('');
+  const [editLastName, setEditLastName] = useState('');
+  const [editEmail, setEditEmail] = useState('');
+  const [editPassword, setEditPassword] = useState('');
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -36,7 +37,20 @@ function Users() {
   }, [user]);
 
   // Opens the modal to add a new user
-  const handleShowModal = () => {
+  const handleShowModal = (admin) => {
+    if (admin) {
+      setEditId(admin._id);
+      setEditFirstName(admin.first_name);
+      setEditLastName(admin.last_name);
+      setEditEmail(admin.email);
+      setEditPassword('');
+    } else {
+      setEditId('');
+      setEditFirstName('');
+      setEditLastName('');
+      setEditEmail('');
+      setEditPassword('');
+    }
     setShowModal(true);
   };
 
@@ -59,10 +73,10 @@ function Users() {
     setError(null);
 
     const newUser = {
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
-      password: password
+      first_name: editFirstName,
+      last_name: editLastName,
+      email: editEmail,
+      password: editPassword
     };
 
     try {
@@ -77,10 +91,10 @@ function Users() {
       const json = await response.json();
 
       if (response.ok) {
-        setFirstName('');
-        setLastName('');
-        setEmail('');
-        setPassword('');
+        setEditFirstName('');
+        setEditLastName('');
+        setEditEmail('');
+        setEditPassword('');
         setError(null);
         handleCloseModal();
         setIsLoading(false);
@@ -95,7 +109,56 @@ function Users() {
     }
   };
 
-  // Function to delete user
+  // Updates an existing user in the API
+  const handleUpdateUser = async (e) => {
+    e.preventDefault();
+
+    if (!user) {
+      setError('You must be logged in');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    const updatedUser = {
+      first_name: editFirstName,
+      last_name: editLastName,
+      email: editEmail,
+      password: editPassword
+    };
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/admin/${editId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(updatedUser),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
+      const json = await response.json();
+
+      if (response.ok) {
+        setEditFirstName('');
+        setEditLastName('');
+        setEditEmail('');
+        setEditPassword('');
+        setError(null);
+        handleCloseModal();
+        setIsLoading(false);
+        fetchUsers(); // Refresh the list of users after updating
+      } else {
+        setError(json.error);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      setError('Failed to update user');
+      setIsLoading(false);
+    }
+  };
+
+  // Function to delete a user
   const deleteUser = async (userId) => {
     try {
       const response = await fetch(`http://localhost:5000/api/admin/${userId}`, {
@@ -105,7 +168,7 @@ function Users() {
           'Authorization': `Bearer ${user.token}`
         }
       });
-  
+
       if (response.ok) {
         setUsers(users.filter((user) => user._id !== userId));
       } else {
@@ -119,8 +182,8 @@ function Users() {
   return (
     <div>
       <Container className="mt-4">
-        <Button variant="success" onClick={handleShowModal}>
-          Add User
+        <Button variant="success" onClick={() => handleShowModal(null)}>
+          Add Admin
         </Button>
         <ListGroup>
           {users.map((user) => (
@@ -130,7 +193,9 @@ function Users() {
                   {user.first_name} {user.last_name}
                 </div>
                 <div>
-                  <Button variant="primary">Edit</Button>
+                  <Button variant="primary" onClick={() => handleShowModal(user)}>
+                    Edit
+                  </Button>
                   <Button variant="danger" onClick={() => deleteUser(user._id)}>
                     Delete
                   </Button>
@@ -144,7 +209,7 @@ function Users() {
 
       <Modal show={showModal} onHide={handleCloseModal} disabled={isLoading}>
         <Modal.Header closeButton>
-          <Modal.Title>Add User</Modal.Title>
+          <Modal.Title>{editId ? 'Edit Admin' : 'Add Admin'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {error && <p className="text-danger">{error}</p>}
@@ -155,8 +220,8 @@ function Users() {
                 type="text"
                 placeholder="Enter first name"
                 name="first_name"
-                value={first_name}
-                onChange={(e) => setFirstName(e.target.value)}
+                value={editFirstName}
+                onChange={(e) => setEditFirstName(e.target.value)}
               />
             </Form.Group>
             <Form.Group controlId="last_name">
@@ -165,8 +230,8 @@ function Users() {
                 type="text"
                 placeholder="Enter last name"
                 name="last_name"
-                value={last_name}
-                onChange={(e) => setLastName(e.target.value)}
+                value={editLastName}
+                onChange={(e) => setEditLastName(e.target.value)}
               />
             </Form.Group>
             <Form.Group controlId="email">
@@ -175,28 +240,30 @@ function Users() {
                 type="email"
                 placeholder="Enter email"
                 name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={editEmail}
+                onChange={(e) => setEditEmail(e.target.value)}
               />
             </Form.Group>
-            <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Enter password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
+            {editId ? null : ( // Render the password field only in the Add User modal
+              <Form.Group controlId="password">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Enter password"
+                  name="password"
+                  value={editPassword}
+                  onChange={(e) => setEditPassword(e.target.value)}
+                />
+              </Form.Group>
+            )}
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal} disabled={isLoading}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSaveUser} disabled={isLoading}>
-            Save
+          <Button variant="primary" onClick={editId ? handleUpdateUser : handleSaveUser} disabled={isLoading}>
+            {editId ? 'Update' : 'Save'}
           </Button>
         </Modal.Footer>
       </Modal>
