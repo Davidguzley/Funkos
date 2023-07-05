@@ -1,39 +1,34 @@
-import React from 'react';
+import {React, useEffect} from 'react';
 import { Container, Row, Col, Card} from 'react-bootstrap';
 import { Link } from 'react-router-dom'
+import { useProductContext } from '../hooks/useProductContext';
 
 function Home() {
-    const products = [
-    {
-        id: 1,
-        name: 'Product 1',
-        image: 'https://files.cults3d.com/uploaders/14265452/illustration-file/0427d021-b91d-4146-9ffd-b1a05323527e/11721268-1054658741999706.jpg',
-        price: 9.99,
-        description: 'Product 1 description',
-        sku: 'SKU-001',
-        brand: 'Brand 1'
-    },
-    {
-        id: 2,
-        name: 'Product 2',
-        image: 'https://files.cults3d.com/uploaders/14265452/illustration-file/0427d021-b91d-4146-9ffd-b1a05323527e/11721268-1054658741999706.jpg',
-        price: 14.99,
-        description: 'Product 2 description',
-        sku: 'SKU-002',
-        brand: 'Brand 2'
-    },
-    // Agrega más productos aquí
-    ];
+    const {products, dispatch} = useProductContext();
+
+    // Get all products
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const response = await fetch('http://localhost:5000/api/product');
+            const json = await response.json();
+
+            if (response.ok) {
+                console.log("traigo algo: ", json)
+                dispatch({type: 'SET_PRODUCTS', payload: json});
+            }
+        }
+        fetchProducts()
+    }, [dispatch]);
 
     return (
         <div>
             <Container className="mt-4">
                 <Row>
-                {products.map((product) => (
-                    <Col key={product.id} md={4} className="mb-4">
-                    < Link to={`/product/${product.id}`}>
+                {products && products.map((product) => (
+                    <Col key={product._id} md={4} className="mb-4">
+                    < Link to={`/product/${product._id}`}>
                         <Card>
-                            <Card.Img variant="top" src={product.image} />
+                            <Card.Img variant="top" src={'https://files.cults3d.com/uploaders/14265452/illustration-file/0427d021-b91d-4146-9ffd-b1a05323527e/11721268-1054658741999706.jpg'} />
                             <Card.Body>
                             <Card.Title>{product.name}</Card.Title>
                             <Card.Text>Price: ${product.price}</Card.Text>
