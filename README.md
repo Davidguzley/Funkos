@@ -29,6 +29,8 @@ The project is organized into two main directories:
 
 - Add a deployment manual for the project on Digital Ocean to deploy the project remotely.
 
+- Add a cart and paypal to buy products from the catalog directly from the application.
+
 ## Usage
 - Create a MongoDB database and obtain your `MongoDB URI` - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
 - Clone the repository to your local machine.

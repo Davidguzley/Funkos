@@ -1,0 +1,43 @@
+<mxfile host="app.diagrams.net" modified="2023-07-05T18:33:41.128Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="E-yCabFITNAf90g6H0Bf" version="21.6.1" type="google">
+  <diagram id="ASh3UsHFkmxA-TOTyOjV" name="Page-1">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="QcUXpb_GQ7igvXcguA_p-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="QcUXpb_GQ7igvXcguA_p-2" target="QcUXpb_GQ7igvXcguA_p-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QcUXpb_GQ7igvXcguA_p-2" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="7" y="350" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="QcUXpb_GQ7igvXcguA_p-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="QcUXpb_GQ7igvXcguA_p-4" target="QcUXpb_GQ7igvXcguA_p-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QcUXpb_GQ7igvXcguA_p-4" value="Users" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="117" y="340" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="h11HXQlQABjswMAYKpN1-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="QcUXpb_GQ7igvXcguA_p-6" target="h11HXQlQABjswMAYKpN1-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QcUXpb_GQ7igvXcguA_p-6" value="&lt;font face=&quot;helvetica&quot;&gt;Add Admin form&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="339" y="340" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="QcUXpb_GQ7igvXcguA_p-8" value="1. Be in" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="47" y="350" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="QcUXpb_GQ7igvXcguA_p-9" value="2.&amp;nbsp;Press Add Admin Button" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="210" y="310" width="83" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="2dzcT3Fbx4GeL5gT_WKq-3" value="3. click Save button&amp;nbsp;&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="414" y="430" width="90" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="h11HXQlQABjswMAYKpN1-3" value="3. click Close" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="300" y="430" width="90" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="h11HXQlQABjswMAYKpN1-4" value="&lt;font face=&quot;helvetica&quot;&gt;Users List&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="339" y="500" width="120" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
