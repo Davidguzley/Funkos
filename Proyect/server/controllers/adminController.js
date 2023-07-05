@@ -23,16 +23,14 @@ const createAdmin = async (req, res) => {
     }
 };
 
+// Get all admin users
 const getAdmins = async (req, res) => {
     const admins = await Admin.find({}).sort({ createdAt: -1 });
 
     res.status(200).json(admins);
 };
 
-const getAdmin = async (req, res) => {
-    res.json({ mssg: 'getAdmin' });
-};
-
+// Delete a specific admin user
 const deleteAdmin = async (req, res) => {
     const { id } = req.params;
 
@@ -49,6 +47,7 @@ const deleteAdmin = async (req, res) => {
     res.status(200).json(admin);
 };
 
+// Update and validate new user information
 const updateAdmin = async (req, res) => {
     const { id } = req.params;
 
@@ -94,7 +93,6 @@ const updateAdmin = async (req, res) => {
 module.exports = {
     createAdmin,
     getAdmins,
-    getAdmin,
     deleteAdmin,
     updateAdmin,
 };

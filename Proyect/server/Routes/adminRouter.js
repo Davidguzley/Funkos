@@ -17,9 +17,6 @@ router.use(requireAuth);
 // GET all Admin users
 router.get('/', getAdmins);
 
-// GET a single Admin user
-router.get('/:id', getAdmin);
-
 // POST a new Admin user
 router.post('/', createAdmin);
 
