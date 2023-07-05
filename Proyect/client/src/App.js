@@ -43,7 +43,7 @@ function App() {
 
               <Route path="/login" element={<Login />} />
 
-              <Route path="/product/:sku" element={<Product />} />
+              <Route path="/product/:id" element={<Product />} />
             </>
           ) : null}
 

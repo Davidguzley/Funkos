@@ -12,11 +12,6 @@ const reportSchema = new mongoose.Schema({
     product_name: {
         type: String,
         required: true,
-    },
-    visit_datetime: {
-        type: Date,
-        default: Date.now,
-        required: true
     }
 }, { timestamps: true });
 

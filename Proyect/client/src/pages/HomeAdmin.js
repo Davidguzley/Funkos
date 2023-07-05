@@ -14,7 +14,6 @@ function HomeAdmin() {
       const json = await response.json();
 
       if (response.ok) {
-        console.log("traigo algo: ", json)
         dispatch({ type: 'SET_PRODUCTS', payload: json });
       }
     }
