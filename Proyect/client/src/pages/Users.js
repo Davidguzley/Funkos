@@ -1,84 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, ListGroup, Button, Modal, Form } from 'react-bootstrap';
 import { useAuthContext } from '../hooks/useAuthContext';
 
 function Users() {
+  const [users, setUsers] = useState([]);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { user } = useAuthContext();
 
-  const users = [
-    {
-      id: 1,
-      first_name: 'John',
-      last_name: 'Doe',
-      email: 'john.doe@example.com'
-    },
-    {
-      id: 2,
-      first_name: 'Jane',
-      last_name: 'Smith',
-      email: 'jane.smith@example.com'
-    },
-    // Agrega más usuarios aquí
-  ];
+  // Fetches the list of admin users from the API
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/admin', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
+      const json = await response.json();
+      setUsers(json);
+    } catch (error) {
+      setError('Failed to fetch users');
+    }
+  };
 
+  useEffect(() => {
+    if (user) {
+      fetchUsers();
+    }
+  }, [user]);
+
+  // Opens the modal to add a new user
   const handleShowModal = () => {
     setShowModal(true);
   };
 
+  // Closes the modal and resets the form
   const handleCloseModal = () => {
     setShowModal(false);
     setError(null);
   };
 
+  // Saves a new user to the API
   const handleSaveUser = async (e) => {
     e.preventDefault();
 
-    if(user == null) {
+    if (!user) {
       setError('You must be logged in');
-      return
+      return;
     }
 
     setIsLoading(true);
     setError(null);
-  
-    const admin = {
+
+    const newUser = {
       first_name: first_name,
       last_name: last_name,
       email: email,
       password: password
     };
-  
-    const response = await fetch('http://localhost:5000/api/admin', {
-      method: 'POST',
-      body: JSON.stringify(admin),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user.token}`
+
+    try {
+      const response = await fetch('http://localhost:5000/api/admin', {
+        method: 'POST',
+        body: JSON.stringify(newUser),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
+      const json = await response.json();
+
+      if (response.ok) {
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setPassword('');
+        setError(null);
+        handleCloseModal();
+        setIsLoading(false);
+        fetchUsers(); // Refresh the list of users after saving
+      } else {
+        setError(json.error);
+        setIsLoading(false);
       }
-    });
-    const json = await response.json();
-  
-    if (!response.ok) {
-      setIsLoading(false);
-      setError(json.error);
-    }
-    if (response.ok) {
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setPassword('');
-      setError(null);
-      handleCloseModal();
+    } catch (error) {
+      setError('Failed to save user');
       setIsLoading(false);
     }
-  };  
+  };
 
   return (
     <div>
