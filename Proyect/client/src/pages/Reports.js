@@ -1,43 +1,53 @@
-import React from 'react';
+import React, { useEffect,  useState} from 'react';
 import { Container, Table } from 'react-bootstrap';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 function Reports() {
-    // Datos de ejemplo de los informes
-    const reports = [
-    {
-        SKU: 'SKU-001',
-        token_id: '123456789',
-        product_name: 'Product 1',
-        visit_datetime: new Date()
-    },
-    {
-        SKU: 'SKU-002',
-        token_id: '987654321',
-        product_name: 'Product 2',
-        visit_datetime: new Date()
-    },
-    // Agrega más informes aquí
-    ];
+    const [reports, setReports] = useState(null);
+    const { user } = useAuthContext();
+
+    useEffect(() => {
+        const fetchReports = async () => {
+            const response = await fetch('http://localhost:5000/api/report', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                }
+            });
+            const json = await response.json();
+
+            if (response.ok) {
+                setReports(json);
+            }
+        }
+
+        if (user) {
+            fetchReports()
+        }
+    }, [user]);
 
     return (
     <div>
         <Container className="mt-4">
         <Table striped bordered hover>
             <thead>
-                <tr>
-                    <th>SKU</th>
-                    <th>Token ID</th>
-                    <th>Product Name</th>
-                    <th>Visit Datetime</th>
-                </tr>
+            <tr>
+                <th>SKU</th>
+                <th>Token ID</th>
+                <th>Product Name</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+            </tr>
             </thead>
             <tbody>
-            {reports.map((report, index) => (
-                <tr key={index}>
-                    <td>{report.SKU}</td>
-                    <td>{report.token_id}</td>
-                    <td>{report.product_name}</td>
-                    <td>{report.visit_datetime.toLocaleString()}</td>
+            {reports && reports.map((report) => (
+                <tr key={report._id}>
+                <td>{report.SKU}</td>
+                <td>{report.token_id}</td>
+                <td>{report.product_name}</td>
+                <td>{report.createdAt}</td>
+                <td>{report.updatedAt}</td>
                 </tr>
             ))}
             </tbody>

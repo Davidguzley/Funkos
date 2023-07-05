@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Topbar from './components/Topbar';
 import ContactUs from './components/ContactUs';
 import HomeAdmin from './pages/HomeAdmin';
@@ -18,11 +18,6 @@ function App() {
   // Function to check if the user is authenticated
   const isAuthenticated = () => {
     return user != null;
-  };
-
-  // Function to redirect to the home page when trying to access an unauthorized path
-  const redirectToHome = () => {
-    return <Navigate to="/" replace />;
   };
 
   //Add cookie session
@@ -60,12 +55,6 @@ function App() {
               <Route path="/product/:id" element={<Product />} />
             </>
           ) : null}
-
-          {/* Default route to redirect */}
-          <Route
-            path="/*"
-            element={redirectToHome()}
-          />
         </Routes>
       </BrowserRouter>
       <ContactUs></ContactUs>
