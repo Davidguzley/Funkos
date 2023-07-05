@@ -14,7 +14,9 @@ const addReport = async (req, res) => {
 
 // Get all products
 const getReports = async (req, res) => {
-    res.json({mssg: 'getReports'})
+    const reports = await Report.find({}).sort({createdAt: -1});
+
+    res.status(200).json(reports);
 };
 
 module.exports = {
