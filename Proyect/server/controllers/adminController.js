@@ -1,5 +1,6 @@
 const Admin = require('../models/adminModel');
 const jwt = require ('jsonwebtoken');
+const mongoose = require('mongoose');
 
 const createToken = (_id) => {
     return jwt.sign({ _id }, process.env.SECRET, { expiresIn: '3d' });
@@ -33,7 +34,19 @@ const getAdmin = async (req, res) => {
 };
 
 const deleteAdmin = async (req, res) => {
-    res.json({mssg: 'deleteAdmin'})
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({error: 'No such admin'});
+    }
+
+    const admin = await Admin.findOneAndDelete({_id: id});
+
+    if (!admin) {
+        return res.status(404).json({error: 'No such admin'});
+    }
+
+    res.status(200).json(admin);
 };
 
 const updateAdmin = async (req, res) => {
