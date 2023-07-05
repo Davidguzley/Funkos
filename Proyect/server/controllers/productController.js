@@ -1,9 +1,16 @@
 const Product = require('../models/productModel');
 const mongoose = require('mongoose');
 
-// Create new workout
+// Create new product
 const createProduct = async (req, res) => {
-    res.json({mssg: 'createProduct'})
+    const {SKU, name, price, brand, description} = req.body;
+    //add doc to db
+    try{
+        const product = await Product.create({SKU, name, price, brand, description});
+        res.status(200).json(product);
+    }catch(error){
+        res.status(400).json({error: error.message});
+    }
 };
 
 // Get all products
