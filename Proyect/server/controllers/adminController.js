@@ -23,7 +23,9 @@ const createAdmin = async (req, res) => {
 };
 
 const getAdmins = async (req, res) => {
-    res.json({mssg: 'getAdmins'})
+    const admins = await Admin.find({}).sort({createdAt: -1});
+
+    res.status(200).json(admins);
 };
 
 const getAdmin = async (req, res) => {
