@@ -1,4 +1,5 @@
 const Product = require('../models/productModel');
+const mongoose = require('mongoose');
 
 // Create new workout
 const createProduct = async (req, res) => {
@@ -14,7 +15,19 @@ const getProducts = async (req, res) => {
 
 // Get a single product
 const getProduct = async (req, res) => {
-    res.json({mssg: 'getProduct'})
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({error: 'No such product'});
+    }
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+        return res.status(404).json({error: 'No such product'});
+    }
+
+    res.status(200).json(product);
 };
 
 // Delete a product
